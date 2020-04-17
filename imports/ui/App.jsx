@@ -1,11 +1,17 @@
-import React from 'react';
-import { Hello } from './Hello.jsx';
-import { Info } from './Info.jsx';
+import React from 'react'
+import Chat from './Chat.jsx'
 
-export const App = () => (
-  <div>
-    <h1>Welcome to Meteor!</h1>
-    <Hello/>
-    <Info/>
-  </div>
-);
+class App extends React.Component {
+  render () {
+    return (
+      <div className='cont'>
+        <div className='collumn'>
+          <Chat />
+        </div>
+        <div className='collumn' />
+      </div>
+    )
+  }
+}
+
+export default App

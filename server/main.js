@@ -1,31 +1,25 @@
-import { Meteor } from 'meteor/meteor';
-import { LinksCollection } from '/imports/api/links';
+import { Meteor } from 'meteor/meteor'
+import { HTTP } from 'meteor/http'
 
-function insertLink({ title, url }) {
-  LinksCollection.insert({title, url, createdAt: new Date()});
-}
+const baseUrl = Meteor.settings.public.chatUrl
 
-Meteor.startup(() => {
-  // If the Links collection is empty, add some data.
-  if (LinksCollection.find().count() === 0) {
-    insertLink({
-      title: 'Do the Tutorial',
-      url: 'https://www.meteor.com/tutorials/react/creating-an-app'
-    });
+Meteor.methods({
+  'chat.registerUser' (params) {
+    // TODO
+  },
+  'chat.getLoginToken' () {
+    if(!this.user) throw new Meteor.Error('Login to access chat')
 
-    insertLink({
-      title: 'Follow the Guide',
-      url: 'http://guide.meteor.com'
-    });
+    const {chat: {username, password}} = Meteor.user()
 
-    insertLink({
-      title: 'Read the Docs',
-      url: 'https://docs.meteor.com'
-    });
+    try {
+      const res = HTTP.post(`${baseUrl}/api/v1/login`, {
+        data: { username, password }
+      })
 
-    insertLink({
-      title: 'Discussions',
-      url: 'https://forums.meteor.com'
-    });
+      return res.data
+    } catch (error) {
+      console.log(error)
+    }
   }
-});
+})
